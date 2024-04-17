@@ -11,10 +11,10 @@
  */
 export const globalError = (err, req, res, next) => {
     const message =
-        err?.response?.statusText || err.message || "Internal Server Error";
-    const status = err.statusCode || err?.response?.status || err.status || 500;
+        err?.response?.statusText || err.message || 'Internal Server Error'
+    const status = err.statusCode || err?.response?.status || err.status || 500
 
-    res.status(status).json({ status, message, success: false });
+    res.status(status).json({ status, message, success: false })
 
-    next();
-};
+    next()
+}

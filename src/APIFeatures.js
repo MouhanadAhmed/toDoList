@@ -12,9 +12,9 @@
  * @param {*} req.query The req query string to extract the input queries from.
  */
 export default class ApiFeatures {
-    constructor(mongooseQuery, queryString) {
-        this.mongooseQuery = mongooseQuery;
-        this.queryString = queryString;
+    constructor (mongooseQuery, queryString) {
+        this.mongooseQuery = mongooseQuery
+        this.queryString = queryString
     }
 
     /**
@@ -24,23 +24,23 @@ export default class ApiFeatures {
      * - The skip variable defines the number of documents to be skipped to display the required documents in the page (manually set to 4 documents matching the limit on the mongooseQuery)
      * ```
      */
-    pagination() {
-        const defaultLimit = 1000;
+    pagination () {
+        const defaultLimit = 1000
 
         // Extract and validate the page number from the query string
-        let page = parseInt(this.queryString.page, 10) || 1;
-        page = page > 0 ? page : 1;
+        let page = parseInt(this.queryString.page, 10) || 1
+        page = page > 0 ? page : 1
 
         // Calculate the skip value
-        const skip = (page - 1) * defaultLimit;
+        const skip = (page - 1) * defaultLimit
 
         // Set the page property
-        this.page = page;
+        this.page = page
 
         // Apply skip and limit to the mongoose query
-        this.mongooseQuery.skip(skip).limit(defaultLimit);
+        this.mongooseQuery.skip(skip).limit(defaultLimit)
 
-        return this;
+        return this
     }
 
     /**
@@ -49,12 +49,12 @@ export default class ApiFeatures {
      * - Search in the documents by name
      * ```
      */
-    search() {
+    search () {
         if (this.queryString.bot) {
             this.mongooseQuery.find({
-                name: { $regex: this.queryString.bot, $options: "i" },
-            });
+                name: { $regex: this.queryString.bot, $options: 'i' }
+            })
         }
-        return this;
+        return this
     }
 }

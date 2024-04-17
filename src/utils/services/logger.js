@@ -8,24 +8,24 @@
  * @returns {string} - Formatted log entry string.
  */
 const logger = (tokens, req, res) => {
-    const logType = res.statusCode >= 400 ? "ERROR" : "SUCCESS";
+    const logType = res.statusCode >= 400 ? 'ERROR' : 'SUCCESS'
 
     /**
      * Formatted log entry string.
      * @type {string}
      */
-    let logEntry = `${tokens.date(req, res, "iso")}: ${logType} - ${tokens.method(req)} ${tokens.url(req)} ${tokens.status(req, res)}\nContent Length: ${tokens.res(req, res, "content-length")}\nResponse time: ${tokens["response-time"](req, res)} ms`;
+    let logEntry = `${tokens.date(req, res, 'iso')}: ${logType} - ${tokens.method(req)} ${tokens.url(req)} ${tokens.status(req, res)}\nContent Length: ${tokens.res(req, res, 'content-length')}\nResponse time: ${tokens['response-time'](req, res)} ms`
 
-    if (logType === "ERROR") {
-        /**
-         * Request and response details for non-successful requests.
-         * @type {string}
-         */
-        const details = `Body: ${JSON.stringify(req.body)}\nResponse: ${JSON.stringify(res.locals.responseBody)}`;
-        logEntry = `${logEntry}\n${details}`;
+    if (logType === 'ERROR') {
+    /**
+     * Request and response details for non-successful requests.
+     * @type {string}
+     */
+        const details = `Body: ${JSON.stringify(req.body)}\nResponse: ${JSON.stringify(res.locals.responseBody)}`
+        logEntry = `${logEntry}\n${details}`
     }
 
-    return logEntry;
-};
+    return logEntry
+}
 
-export default logger;
+export default logger

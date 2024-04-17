@@ -1,13 +1,14 @@
 import express from 'express'
 import { validation } from '../../utils/middleware/validation.js'
-import * as userControllers from './user.controller.js'
-import {
-    createUserSchema,
-    deleteUserSchema,
-    getUserByIdSchema,
-    updateUserSchema
-} from './user.validator.js'
-const UserRouter = express.Router()
+import { protectedRoutes } from '../auth/auth.controller.js'
+import * as bloodControllers from './blood.controller.js'
+// import {
+//     createUserSchema,
+//     deleteUserSchema,
+//     getUserByIdSchema,
+//     updateUserSchema,
+// } from "./user.validator.js";
+const BloodRouter = express.Router()
 /**
  * @swagger
  * components:
@@ -42,14 +43,14 @@ const UserRouter = express.Router()
  *            example:
  *                "error": "Unauthorized"
  */
-UserRouter.route('/')
-    .post(validation(createUserSchema), userControllers.addUser)
-    .get(userControllers.getAllUsers)
+BloodRouter.route('/')
+    .post(protectedRoutes, bloodControllers.addBlood)
+    .get(bloodControllers.getAllBlood)
 
-UserRouter.route('/:id')
-    .get(validation(getUserByIdSchema), userControllers.getUserById)
-    .put(validation(updateUserSchema), userControllers.updateUser)
-    .delete(validation(deleteUserSchema), userControllers.deleteUser)
+// BloodRouter.route("/:id")
+// .get(validation(getUserByIdSchema), userControllers.getUserById)
+// .put(validation(updateUserSchema), userControllers.updateUser)
+// .delete(validation(deleteUserSchema), userControllers.deleteUser);
 
-UserRouter.route('/changePassword/:id').patch(userControllers.changePassword)
-export default UserRouter
+// BloodRouter.route("/changePassword/:id").patch(userControllers.changePassword);
+export default BloodRouter

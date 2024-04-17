@@ -1,46 +1,46 @@
-import dotenv from "dotenv";
-import express from "express";
-import cors from "cors";
-import morgan from "morgan";
-import dbConnection from "./src/db.js";
-import init from "./src/index.js";
-import AppError from "./src/utils/services/AppError.js";
-import logger from "./src/utils/services/logger.js";
+import dotenv from 'dotenv'
+import express from 'express'
+import cors from 'cors'
+import morgan from 'morgan'
+import dbConnection from './src/db.js'
+import init from './src/index.js'
+import AppError from './src/utils/services/AppError.js'
+import logger from './src/utils/services/logger.js'
 
-dotenv.config();
+dotenv.config()
 
-const app = express();
+const app = express()
 app.use([
     cors(),
     express.json(),
     express.urlencoded({ extended: true }),
     express.text(),
-    morgan(logger),
-]);
+    morgan(logger)
+])
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080
 
-dbConnection();
+dbConnection()
 
-init(app);
+init(app)
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
     res.json({
-        version: "1.0.0",
-        message: "Welcome to Blood Bank API",
-        success: true,
-    });
-});
+        version: '1.0.0',
+        message: 'Welcome to Blood Bank API',
+        success: true
+    })
+})
 
-app.listen(PORT, () => console.info(`server is listening on port ${PORT}!`));
+app.listen(PORT, () => console.info(`server is listening on port ${PORT}!`))
 
 // Fallback route for non-existing paths
-app.all("*", (req, res) => {
+app.all('*', (req, res) => {
     res.status(404).json({
         success: false,
-        error: `Path ${req.originalUrl} not found.`,
-    });
-});
+        error: `Path ${req.originalUrl} not found.`
+    })
+})
 
 // Global error handler for unhandled promise rejections
-process.on("unhandledRejection", (err) => new AppError(err));
+process.on('unhandledRejection', (err) => new AppError(err))
