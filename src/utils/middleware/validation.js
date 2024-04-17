@@ -9,16 +9,16 @@
 
 export const validation = (schema) => {
     return async (req, res, next) => {
-        const inputs = { ...req.body, ...req.params, ...req.query }
-        const { error } = schema.validate(inputs, { abortEarly: false })
+        const inputs = { ...req.body, ...req.params, ...req.query };
+        const { error } = schema.validate(inputs, { abortEarly: false });
         if (error) {
             //    console.log("error",error)
-            const errors = error.details.map((detail) => detail.message)
+            const errors = error.details.map((detail) => detail.message);
             // console.log("errors",errors)
             // return next(new AppError(errors,403))
-            res.json(errors)
+            res.json(errors);
         } else {
-            next()
+            next();
         }
-    }
-}
+    };
+};

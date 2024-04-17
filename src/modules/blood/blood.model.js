@@ -1,18 +1,18 @@
-import { Schema, model, Types } from 'mongoose'
+import { Schema, model, Types } from "mongoose";
 
 const bloodSchema = new Schema(
     {
-        type: { type: 'String' },
-        city: { type: 'String' },
+        type: { type: "String" },
+        city: { type: "String" },
         expiry: Date,
         donor: {
             type: Types.ObjectId,
-            ref: 'User'
+            ref: "User",
         },
         virusTest: { type: Boolean },
-        approved: { type: Boolean, default: false }
+        approved: { type: Boolean, default: false },
     },
-    { timestaps: true }
-)
+    { timestaps: true },
+);
 
-export const bloodModel = model('Blood', bloodSchema)
+export const bloodModel = model("Blood", bloodSchema);

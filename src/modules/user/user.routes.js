@@ -1,13 +1,13 @@
-import express from 'express'
-import { validation } from '../../utils/middleware/validation.js'
-import * as userControllers from './user.controller.js'
+import express from "express";
+import { validation } from "../../utils/middleware/validation.js";
+import * as userControllers from "./user.controller.js";
 import {
     createUserSchema,
     deleteUserSchema,
     getUserByIdSchema,
-    updateUserSchema
-} from './user.validator.js'
-const UserRouter = express.Router()
+    updateUserSchema,
+} from "./user.validator.js";
+const UserRouter = express.Router();
 /**
  * @swagger
  * components:
@@ -42,14 +42,14 @@ const UserRouter = express.Router()
  *            example:
  *                "error": "Unauthorized"
  */
-UserRouter.route('/')
+UserRouter.route("/")
     .post(validation(createUserSchema), userControllers.addUser)
-    .get(userControllers.getAllUsers)
+    .get(userControllers.getAllUsers);
 
-UserRouter.route('/:id')
+UserRouter.route("/:id")
     .get(validation(getUserByIdSchema), userControllers.getUserById)
     .put(validation(updateUserSchema), userControllers.updateUser)
-    .delete(validation(deleteUserSchema), userControllers.deleteUser)
+    .delete(validation(deleteUserSchema), userControllers.deleteUser);
 
-UserRouter.route('/changePassword/:id').patch(userControllers.changePassword)
-export default UserRouter
+UserRouter.route("/changePassword/:id").patch(userControllers.changePassword);
+export default UserRouter;

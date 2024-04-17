@@ -1,39 +1,39 @@
-import express from 'express'
-import { validation } from '../../utils/middleware/validation.js'
-import { createUserSchema } from '../user/user.validator.js'
-import * as authController from './auth.controller.js'
+import express from "express";
+import { validation } from "../../utils/middleware/validation.js";
+import { createUserSchema } from "../user/user.validator.js";
+import * as authController from "./auth.controller.js";
 import {
     changeMyPasswordSchema,
     forgotPasswordSchema,
     resetPasswordSchema,
     signInOutSchema,
-    verifyRessetCodeSchema
-} from './auth.validator.js'
-const authRouter = express.Router()
+    verifyRessetCodeSchema,
+} from "./auth.validator.js";
+const authRouter = express.Router();
 
-authRouter.post('/signup', validation(createUserSchema), authController.signUp)
-authRouter.post('/logout', authController.logOut)
-authRouter.post('/signin', validation(signInOutSchema), authController.signIn)
-authRouter.get('/verify/:token', authController.verifyEmail)
+authRouter.post("/signup", validation(createUserSchema), authController.signUp);
+authRouter.post("/logout", authController.logOut);
+authRouter.post("/signin", validation(signInOutSchema), authController.signIn);
+authRouter.get("/verify/:token", authController.verifyEmail);
 authRouter.post(
-    '/forgotPassword',
+    "/forgotPassword",
     validation(forgotPasswordSchema),
-    authController.forgotPassword
-)
+    authController.forgotPassword,
+);
 authRouter.post(
-    '/verifyRessetCode',
+    "/verifyRessetCode",
     validation(verifyRessetCodeSchema),
-    authController.verifyRessetCode
-)
+    authController.verifyRessetCode,
+);
 authRouter.put(
-    '/changeMyPassword',
+    "/changeMyPassword",
     validation(changeMyPasswordSchema),
-    authController.changeMyPassword
-)
+    authController.changeMyPassword,
+);
 authRouter.put(
-    '/resetPassword',
+    "/resetPassword",
     validation(resetPasswordSchema),
-    authController.ressetPassword
-)
+    authController.ressetPassword,
+);
 
-export default authRouter
+export default authRouter;

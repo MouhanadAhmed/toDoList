@@ -1,16 +1,15 @@
-import jwt from 'jsonwebtoken'
-import axios from 'axios'
-import bcrypt from 'bcrypt'
-import { catchAsyncError } from '../../utils/middleware/catchAsyncError.js'
-import AppError from '../../utils/services/AppError.js'
+import bcrypt from "bcrypt";
+import slugify from "slugify";
+import { catchAsyncError } from "../../utils/middleware/catchAsyncError.js";
+import AppError from "../../utils/services/AppError.js";
 import {
     deleteOne,
     addOne,
     getAll,
     updateOne,
-    getById
-} from '../../utils/handlers/refactor.js'
-import { userModel } from './user.model.js'
+    getById,
+} from "../../utils/handlers/refactor.js";
+import { userModel } from "./user.model.js";
 /**
  * This is Add user Controller.
  * ```
@@ -26,41 +25,41 @@ import { userModel } from './user.model.js'
  * This is Add user Controller
  
  */
-export const addUser = addOne(userModel, 'User')
+export const addUser = addOne(userModel, "User");
 /**
  * This is Get All users Controller
  
  */
-export const getAllUsers = getAll(userModel, 'Users')
+export const getAllUsers = getAll(userModel, "Users");
 /**
  * This is Update user Controller
  
  */
-export const updateUser = updateOne(userModel, 'User')
+export const updateUser = updateOne(userModel, "User");
 /**
  * This is Delete user Controller
  
  */
-export const deleteUser = deleteOne(userModel, 'User')
+export const deleteUser = deleteOne(userModel, "User");
 
 /**
  * This is Get user by Id Controller
  
  */
-export const getUserById = getById(userModel, 'User')
+export const getUserById = getById(userModel, "User");
 
 /**
  * This is Update user Controller
  
  */
 export const changePassword = catchAsyncError(async (req, res, next) => {
-    const { id } = req.params
-    req.body.changePasswordAt = Date.now()
-    if (req.body.name) req.body.slug = slugify(req.body.name)
-    req.body.password = await bcrypt.hash(req.body.password, 7)
+    const { id } = req.params;
+    req.body.changePasswordAt = Date.now();
+    if (req.body.name) req.body.slug = slugify(req.body.name);
+    req.body.password = await bcrypt.hash(req.body.password, 7);
     const document = await userModel.findByIdAndUpdate(id, req.body, {
-        new: true
-    })
-    document && res.status(200).json({ message: 'Success', document })
-    !document && next(new AppError('Invalid user Id', 404))
-})
+        new: true,
+    });
+    document && res.status(200).json({ message: "Success", document });
+    !document && next(new AppError("Invalid user Id", 404));
+});

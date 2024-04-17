@@ -6,10 +6,10 @@
  * @returns {Object} - Error Object.
  */
 export default class AppError extends Error {
-    constructor (message, statusCode) {
-        super(message)
-        this.status = statusCode
-        this.message = message
-        this.success = false
+    constructor(message, statusCode) {
+        super(message);
+        this.status = statusCode;
+        this.message = message;
+        this.success = false;
     }
 }

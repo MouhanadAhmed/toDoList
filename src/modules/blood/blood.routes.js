@@ -1,14 +1,13 @@
-import express from 'express'
-import { validation } from '../../utils/middleware/validation.js'
-import { protectedRoutes } from '../auth/auth.controller.js'
-import * as bloodControllers from './blood.controller.js'
+import express from "express";
+import { protectedRoutes } from "../auth/auth.controller.js";
+import * as bloodControllers from "./blood.controller.js";
 // import {
 //     createUserSchema,
 //     deleteUserSchema,
 //     getUserByIdSchema,
 //     updateUserSchema,
 // } from "./user.validator.js";
-const BloodRouter = express.Router()
+const BloodRouter = express.Router();
 /**
  * @swagger
  * components:
@@ -43,9 +42,9 @@ const BloodRouter = express.Router()
  *            example:
  *                "error": "Unauthorized"
  */
-BloodRouter.route('/')
+BloodRouter.route("/")
     .post(protectedRoutes, bloodControllers.addBlood)
-    .get(bloodControllers.getAllBlood)
+    .get(bloodControllers.getAllBlood);
 
 // BloodRouter.route("/:id")
 // .get(validation(getUserByIdSchema), userControllers.getUserById)
@@ -53,4 +52,4 @@ BloodRouter.route('/')
 // .delete(validation(deleteUserSchema), userControllers.deleteUser);
 
 // BloodRouter.route("/changePassword/:id").patch(userControllers.changePassword);
-export default BloodRouter
+export default BloodRouter;

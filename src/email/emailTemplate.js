@@ -1,4 +1,4 @@
-export function emailTemplate (api, text, title, btn) {
+export function emailTemplate(api, text, title, btn) {
     return `
     <!DOCTYPE html>
     <html>
@@ -192,7 +192,7 @@ export function emailTemplate (api, text, title, btn) {
                   </table>
                 </td>
               </tr>`
-        : ''
+        : ""
 }
               <!-- start button -->
 
@@ -246,5 +246,5 @@ export function emailTemplate (api, text, title, btn) {
     
     </body>
     </html>
-    `
+    `;
 }

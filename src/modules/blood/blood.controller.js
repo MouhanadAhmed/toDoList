@@ -3,9 +3,9 @@ import {
     addOne,
     getAll,
     updateOne,
-    getById
-} from '../../utils/handlers/refactor.js'
-import { bloodModel } from './blood.model.js'
+    getById,
+} from "../../utils/handlers/refactor.js";
+import { bloodModel } from "./blood.model.js";
 /**
  * This is Add user Controller.
  * ```
@@ -21,25 +21,25 @@ import { bloodModel } from './blood.model.js'
  * This is Add user Controller
  
  */
-export const addBlood = addOne(bloodModel, 'Blood')
+export const addBlood = addOne(bloodModel, "Blood");
 /**
  * This is Get All users Controller
  
  */
-export const getAllBlood = getAll(bloodModel, 'Blood')
+export const getAllBlood = getAll(bloodModel, "Blood");
 /**
  * This is Update user Controller
  
  */
-export const updateUser = updateOne(bloodModel, 'User')
+export const updateUser = updateOne(bloodModel, "User");
 /**
  * This is Delete user Controller
  
  */
-export const deleteUser = deleteOne(bloodModel, 'User')
+export const deleteUser = deleteOne(bloodModel, "User");
 
 /**
  * This is Get user by Id Controller
  
  */
-export const getUserById = getById(bloodModel, 'User')
+export const getUserById = getById(bloodModel, "User");

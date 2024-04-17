@@ -2,10 +2,10 @@ import { Schema, model } from "mongoose";
 
 const hospitalSchema = new Schema(
     {
-        name : { type: "String"  , unique:true },
-        city : { type: "String" },
+        name: { type: "String", unique: true },
+        city: { type: "String" },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 
-export const hospitalModel = model("Hospital", hospitalSchema)
+export const hospitalModel = model("Hospital", hospitalSchema);

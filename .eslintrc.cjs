@@ -12,12 +12,11 @@ module.exports = {
     settings: {
         node: {
             tryExtensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
-            version: '8.3.0',
+            version: "8.3.0",
         },
     },
     rules: {
         "rest-spread-spacing": ["error", "never"],
-        "node/no-unsupported-features/es-syntax": ["error", { "version": ">=8.3.0" }],
         "no-console":
             process.env.MODE === "development"
                 ? "off"
