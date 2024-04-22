@@ -10,6 +10,7 @@ import {
     getById,
 } from "../../utils/handlers/refactor.js";
 import { userModel } from "./user.model.js";
+import { insertUser } from "./user.service.js";
 /**
  * This is Add user Controller.
  * ```
@@ -25,7 +26,22 @@ import { userModel } from "./user.model.js";
  * This is Add user Controller
  
  */
-export const addUser = addOne(userModel, "User");
+// export const  addUser = deleteOne(userModel, "User")
+export const  addUser =catchAsyncError(async (req, res, next) => {
+    let body = {...req.body};
+    body.slug = slugify(body.name);
+    let UniqueKey = { email: body.email };
+    let result =await insertUser(
+        userModel,
+        UniqueKey,
+        body,
+        "User",
+    );
+    console.info("ewsult", result);
+    result === "false" && next(new AppError("User alredy exists", 403));
+    result !== "false" && res.status(201).json({ message: "success",result });
+})
+// addOne(userModel, "User");
 /**
  * This is Get All users Controller
  

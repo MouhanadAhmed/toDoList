@@ -35,12 +35,12 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => console.info(`server is listening on port ${PORT}!`));
 
 // Fallback route for non-existing paths
-app.all("*", (req, res) => {
-    res.status(404).json({
-        success: false,
-        error: `Path ${req.originalUrl} not found.`,
-    });
-});
+// app.all("*", (req, res) => {
+//     res.status(404).json({
+//         success: false,
+//         error: `Path ${req.originalUrl} not found.`,
+//     });
+// });
 
 // Global error handler for unhandled promise rejections
 process.on("unhandledRejection", (err) => new AppError(err));

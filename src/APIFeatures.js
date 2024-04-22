@@ -25,7 +25,7 @@ export default class ApiFeatures {
      * ```
      */
     pagination() {
-        const defaultLimit = 1000;
+        const defaultLimit = 10;
 
         // Extract and validate the page number from the query string
         let page = parseInt(this.queryString.page, 10) || 1;
@@ -44,16 +44,77 @@ export default class ApiFeatures {
     }
 
     /**
+     * This is API Features filter method
+     * ```
+     * - Creates a deep copy from the query string into filter object
+     * - Deletes unwanted quries such as 'page','sort','keyword','fields'
+     * ```
+     */
+    filter() {
+        let filterObj = { ...this.queryString };
+        let excludeQuery = ["page", "sort", "keyword", "fields"];
+        excludeQuery.forEach((q) => {
+            delete filterObj[q];
+        });
+        filterObj = JSON.stringify(filterObj);
+        filterObj = filterObj.replace(
+            /\bgt|gte|lt|lte\b/g,
+            (match) => `$${match}`,
+        );
+        filterObj = JSON.parse(filterObj);
+        this.mongooseQuery.find(filterObj);
+        return this;
+    }
+    /**
+     * This is API Features Sort method
+     * ```
+     * - Sorts the documents by a field name
+     * ```
+     */
+    sort() {
+        if (this.queryString.sort) {
+            let sortBy = this.queryString.sort.split(",").join(" ");
+            this.mongooseQuery.sort(sortBy);
+        }
+        return this;
+    }
+    /**
      * This is API Features Search method
      * ```
-     * - Search in the documents by name
+     * - Search in the documents by name or description
      * ```
      */
     search() {
-        if (this.queryString.bot) {
+        if (this.queryString.keyword) {
             this.mongooseQuery.find({
-                name: { $regex: this.queryString.bot, $options: "i" },
+                $or: [
+                    {
+                        name: {
+                            $regex: this.queryString.keyword,
+                            $options: "i",
+                        },
+                    },
+                    {
+                        description: {
+                            $regex: this.queryString.keyword,
+                            $options: "i",
+                        },
+                    },
+                ],
             });
+        }
+        return this;
+    }
+    /**
+     * This is API Features fields method
+     * ```
+     * - Returns only the specified fields for each document
+     * ```
+     */
+    fields() {
+        if (this.queryString.fields) {
+            let fields = this.queryString.fields.split(",").join(" ");
+            this.mongooseQuery.select(fields);
         }
         return this;
     }

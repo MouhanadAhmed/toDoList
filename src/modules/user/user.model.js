@@ -3,21 +3,13 @@ import bcrypt from "bcrypt";
 
 const userSchema = new Schema(
     {
-        nationalId: { type: "String", unique: true },
         name: { type: "String" },
         slug: {
             type: String,
             lowercase: true,
             required: true,
         },
-        city: { type: "String" },
         email: { type: "String", unique: true },
-        lastDonation: Date,
-        role: {
-            type: String,
-            enum: ["admin", "donor"],
-            default: "donor",
-        },
         password: {
             type: String,
             required: true,
@@ -38,7 +30,7 @@ const userSchema = new Schema(
         },
         ressetCodeAt: Date,
     },
-    { timestaps: true },
+    { timestamps: true },
 );
 userSchema.pre("save", function () {
     this.password = bcrypt.hashSync(this.password, 7);

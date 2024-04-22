@@ -11,14 +11,11 @@ import Joi from "joi";
  */
 export const createUserSchema = Joi.object({
     name: Joi.string().min(2).max(30).required(),
-    city: Joi.string().min(2).max(10).required(),
-    nationalId: Joi.string().min(2).max(14).required(),
     email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
         .required(),
     password: Joi.string().min(5).max(30).required(),
     // phone:Joi.string().length(11).pattern(/^\d+$/).required(),
-    role: Joi.string().pattern(/^(donor|admin)$/),
 });
 /**
  * This is Update User validation Schema - validates the following fields :
@@ -38,7 +35,6 @@ export const updateUserSchema = Joi.object({
         minDomainSegments: 2,
         tlds: { allow: ["com", "net"] },
     }),
-    role: Joi.string().pattern(/^(donor|admin)$/),
 });
 /**
  * This is Delete User validation Schema - validates the following fields :

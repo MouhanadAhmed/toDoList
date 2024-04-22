@@ -37,7 +37,7 @@ export const signIn = catchAsyncError(async (req, res, next) => {
         console.info(loggedIn);
         const token = jwt.sign(
             { name: isFound.name, userId: isFound._id, role: isFound.role },
-            "treka",
+            process.env.VERIFY_SECRET,
         );
         return res.json({ message: "Success", token });
     }
@@ -53,7 +53,7 @@ export const logOut = catchAsyncError(async (req, res, next) => {
     const { token } = req.headers;
     if (!token) return next(new AppError("Please provide token", 401));
 
-    const decoded = await jwt.verify(token, "treka");
+    const decoded = await jwt.verify(token, process.env.VERIFY_SECRET);
     console.info(decoded);
 
     const user = await userModel.findByIdAndUpdate(
@@ -76,7 +76,7 @@ export const protectedRoutes = catchAsyncError(async (req, res, next) => {
     const { token } = req.headers;
     if (!token) return next(new AppError("Please provide token", 401));
 
-    const decoded = await jwt.verify(token, "treka");
+    const decoded = await jwt.verify(token, process.env.VERIFY_SECRET);
     console.info(decoded);
 
     const user = await userModel.findById(decoded.userId);
@@ -192,7 +192,7 @@ export const changeMyPassword = async (req, res, next) => {
     const { token } = req.headers;
     const { currentPassword, password, rePassword } = req.body;
 
-    jwt.verify(token, "treka", async (err, decoded) => {
+    jwt.verify(token, process.env.VERIFY_SECRET, async (err, decoded) => {
         if (err) return next(new AppError("Invalid token", 401));
         const user = await userModel.findById(decoded.userId);
         if (!user) return next(new AppError("Invalid User token", 404));
@@ -244,4 +244,44 @@ export const ressetPassword = async (req, res, next) => {
         { new: true },
     );
     return res.json({ message: "Success", updatedUser });
+};
+
+/**
+ * This is Change logged user details Controller
+ * - Accepts token from the Req.params
+ * - Validate token, user is active
+ * - Accepts name, email, city  from Req.body
+ * - Verifies current password
+ * - Updates password and changePasswordAt
+ */
+export const updateMe = async (req, res, next) => {
+    const { token } = req.headers;
+    const { name, email, city } = req.body;
+
+    jwt.verify(token, process.env.VERIFY_SECRET, async (err, decoded) => {
+        if (err) return next(new AppError("Invalid token", 401));
+        const user = await userModel.findById(decoded.userId);
+        if (!user) return next(new AppError("Invalid User token", 404));
+        if (user.changePasswordAt) {
+            const changePasswordTime = parseInt(
+                user.changePasswordAt?.getTime() / 1000,
+            );
+
+            if (changePasswordTime > decoded.iat) {
+                return next(new AppError("Invalid token , expired", 401));
+            }
+        }
+        if (!user.isActive) {
+            return next(new AppError("User is not active", 403));
+        }
+
+        const updatedUser = await userModel.findByIdAndUpdate(
+            user._id,
+            { name, email, city },
+            { new: true },
+        );
+        if (updatedUser) {
+            return res.json({ message: "Success", updatedUser });
+        }
+    });
 };

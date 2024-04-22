@@ -1,10 +1,9 @@
 import slugify from "slugify";
 import jwt from "jsonwebtoken";
-import AppError from "../services/AppError.js";
-import { catchAsyncError } from "../middleware/catchAsyncError.js";
-import { userModel } from "../../modules/user/user.model.js";
+import AppError from "../../utils/services/AppError.js";
+import { catchAsyncError } from "../../utils/middleware/catchAsyncError.js";
 import { sendEmail } from "../../email/sendEmail.js";
-import ApiFeatures from "../../APIFeatures.js";
+import { addOne } from "../../utils/handlers/refactor.js";
 
 var dateDiffInDays = function (date1, date2) {
     let dt1 = new Date(date1);
@@ -16,42 +15,43 @@ var dateDiffInDays = function (date1, date2) {
     );
 };
 
-const CheckInDb = async (model, UniqueKey) => {
-    const isFound = await model.findOne(UniqueKey);
-    return isFound ? true : false;
-};
+// const CheckInDb = async (model, UniqueKey) => {
+//     const isFound = await model.findOne(UniqueKey);
+//     // console.info("isFound",isFound);
+//     return isFound ? true : false;
+// };
 /**
  * Get all documents handler.
  * @param {Model} model - The model to perform the operation on.
  * @param {string} result - The name to be displayed to the frontend as the returned document.
  */
-export const getAll = (model, result) =>
-    catchAsyncError(async ({ params, query }, res) => {
-        const filters = params.chatId ? { chat: params.chatId } : {};
+// export const getAll = (model, result) =>
+//     catchAsyncError(async ({ params, query }, res) => {
+//         const filters = params.chatId ? { chat: params.chatId } : {};
 
-        const totalDocuments = await model.countDocuments();
+//         const totalDocuments = await model.countDocuments();
 
-        const apiFeature = new ApiFeatures(model.find(filters), query)
-            .pagination()
-            .search();
+//         const apiFeature = new ApiFeatures(model.find(filters), query)
+//             .pagination()
+//             .search();
 
-        let documents = await apiFeature.mongooseQuery;
+//         let documents = await apiFeature.mongooseQuery;
 
-        // Check if the 'order' property exists before sorting
-        if (model.schema.paths.order) {
-            documents = documents.sort("order");
-        }
+//         // Check if the 'order' property exists before sorting
+//         if (model.schema.paths.order) {
+//             documents = documents.sort("order");
+//         }
 
-        const documentCount =
-            documents.length / 10 > 1 ? documents.length / 10 : 1;
+//         const documentCount =
+//             documents.length / 10 > 1 ? documents.length / 10 : 1;
 
-        res.status(200).json({
-            page: apiFeature.page,
-            pages: documentCount,
-            count: totalDocuments,
-            [result]: documents,
-        });
-    });
+//         res.status(200).json({
+//             page: apiFeature.page,
+//             pages: documentCount,
+//             count: totalDocuments,
+//             [result]: documents,
+//         });
+//     });
 
 /**
  * This is Delete One document  handler
@@ -60,18 +60,18 @@ export const getAll = (model, result) =>
  * ```
  *  @param model  The model to perform the operation on
  *  @param result  The name to be displayed to the frontend as returned document
- */
-export const deleteOne = (model, result) => {
-    return catchAsyncError(async (req, res, next) => {
-        const { id } = req.params;
+//  */
+// export const deleteOne = (model, result) => {
+//     return catchAsyncError(async (req, res, next) => {
+//         const { id } = req.params;
 
-        const document = await model.findByIdAndDelete(id);
-        const response = {};
-        response[result] = document;
-        document && res.status(200).json({ message: "Success", ...response });
-        !document && next(new AppError("document not found", 404));
-    });
-};
+//         const document = await model.findByIdAndDelete(id);
+//         const response = {};
+//         response[result] = document;
+//         document && res.status(200).json({ message: "Success", ...response });
+//         !document && next(new AppError("document not found", 404));
+//     });
+// };
 /**
  * This is Add One document  handler
  * ```
@@ -82,13 +82,25 @@ export const deleteOne = (model, result) => {
  *  @param model  The model to perform the operation on
  *  @param result  The name to be displayed to the frontend as returned document
  */
-export const addOne = async(model, UniqueKey, body) => {
-    if (await CheckInDb(model, UniqueKey)) {
-        return "false";
+export const insertUser = async(model, UniqueKey, body) => {
+    const response = await addOne(model, UniqueKey, body);
+    console.info("response from service", response);
+
+    if (response !== "false") {
+        const verifyToken = jwt.sign(
+            { id: response._id },
+            process.env.VERIFY_SECRET,
+        );
+        sendEmail({
+            email: body.email,
+            api: `http://localhost:8080/api/v1/auth/verify/${verifyToken}`,
+            sub: "Verify Email",
+            text: "Tap the button below to confirm your email address. If you didn't create an account with Central Blood Bank, you can safely ignore this email",
+            title: "Confirm Your Email Address",
+            btn: "Verify Email",
+        });
     }
-    const document = new model(body);
-    await document.save();
-    return document
+    return response
 };
 /**
  * This is Get all documents  handler

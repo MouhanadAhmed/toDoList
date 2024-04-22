@@ -16,5 +16,5 @@ export const globalError = (err, req, res, next) => {
 
     res.status(status).json({ status, message, success: false });
 
-    next();
+    // next();
 };

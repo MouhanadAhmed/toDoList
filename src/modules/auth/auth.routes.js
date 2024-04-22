@@ -11,7 +11,7 @@ import {
 } from "./auth.validator.js";
 const authRouter = express.Router();
 
-authRouter.post("/signup", validation(createUserSchema), authController.signUp);
+// authRouter.post("/signup", validation(createUserSchema), authController.signUp);
 authRouter.post("/logout", authController.logOut);
 authRouter.post("/signin", validation(signInOutSchema), authController.signIn);
 authRouter.get("/verify/:token", authController.verifyEmail);
@@ -36,4 +36,5 @@ authRouter.put(
     authController.ressetPassword,
 );
 
+authRouter.put("/updateMe", authController.updateMe);
 export default authRouter;
