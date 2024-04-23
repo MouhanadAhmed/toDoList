@@ -44,7 +44,7 @@ const UserRouter = express.Router();
  */
 UserRouter.route("/")
     .post(validation(createUserSchema), userControllers.addUser)
-    .get(userControllers.getAllUsers);
+    .get(userControllers.getAll);
 
 UserRouter.route("/:id")
     .get(validation(getUserByIdSchema), userControllers.getUserById)

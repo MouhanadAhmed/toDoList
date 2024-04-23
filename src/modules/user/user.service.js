@@ -5,10 +5,10 @@ import { catchAsyncError } from "../../utils/middleware/catchAsyncError.js";
 import { sendEmail } from "../../email/sendEmail.js";
 import {
     addOne,
+    getAll,
     deleteOne,
     getById,
-    updateOne,
-} from "../../utils/handlers/refactor.js";
+    updateOne,} from "../../utils/handlers/refactor.js";
 
 var dateDiffInDays = function (date1, date2) {
     let dt1 = new Date(date1);
@@ -24,33 +24,9 @@ var dateDiffInDays = function (date1, date2) {
  * @param {Model} model - The model to perform the operation on.
  * @param {string} result - The name to be displayed to the frontend as the returned document.
  */
-// export const getAll = (model, result) =>
-//     catchAsyncError(async ({ params, query }, res) => {
-//         const filters = params.chatId ? { chat: params.chatId } : {};
-
-//         const totalDocuments = await model.countDocuments();
-
-//         const apiFeature = new ApiFeatures(model.find(filters), query)
-//             .pagination()
-//             .search();
-
-//         let documents = await apiFeature.mongooseQuery;
-
-//         // Check if the 'order' property exists before sorting
-//         if (model.schema.paths.order) {
-//             documents = documents.sort("order");
-//         }
-
-//         const documentCount =
-//             documents.length / 10 > 1 ? documents.length / 10 : 1;
-
-//         res.status(200).json({
-//             page: apiFeature.page,
-//             pages: documentCount,
-//             count: totalDocuments,
-//             [result]: documents,
-//         });
-//     });
+export const getAllUsers = async (model, UniqueKey, filters, query) => {
+    return await getAll(model, UniqueKey, filters, query);
+};
 
 /**
  * This is Delete One document  handler
