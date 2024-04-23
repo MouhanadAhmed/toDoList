@@ -3,7 +3,12 @@ import jwt from "jsonwebtoken";
 import AppError from "../../utils/services/AppError.js";
 import { catchAsyncError } from "../../utils/middleware/catchAsyncError.js";
 import { sendEmail } from "../../email/sendEmail.js";
-import { addOne } from "../../utils/handlers/refactor.js";
+import {
+    addOne,
+    deleteOne,
+    getById,
+    updateOne,
+} from "../../utils/handlers/refactor.js";
 
 var dateDiffInDays = function (date1, date2) {
     let dt1 = new Date(date1);
@@ -14,12 +19,6 @@ var dateDiffInDays = function (date1, date2) {
             (1000 * 60 * 60 * 24),
     );
 };
-
-// const CheckInDb = async (model, UniqueKey) => {
-//     const isFound = await model.findOne(UniqueKey);
-//     // console.info("isFound",isFound);
-//     return isFound ? true : false;
-// };
 /**
  * Get all documents handler.
  * @param {Model} model - The model to perform the operation on.
@@ -61,28 +60,22 @@ var dateDiffInDays = function (date1, date2) {
  *  @param model  The model to perform the operation on
  *  @param result  The name to be displayed to the frontend as returned document
 //  */
-// export const deleteOne = (model, result) => {
-//     return catchAsyncError(async (req, res, next) => {
-//         const { id } = req.params;
-
-//         const document = await model.findByIdAndDelete(id);
-//         const response = {};
-//         response[result] = document;
-//         document && res.status(200).json({ message: "Success", ...response });
-//         !document && next(new AppError("document not found", 404));
-//     });
-// };
+export const deleteUser = async (model, id) => {
+    const dbResponse = await deleteOne(model, id);
+    return dbResponse;
+};
 /**
- * This is Add One document  handler
+ * This is insert One user service
  * ```
  * - Accepts id from Req.params
  * - Verify user token to addd product
  * - Send Verification Email to the user
  * ```
  *  @param model  The model to perform the operation on
- *  @param result  The name to be displayed to the frontend as returned document
+ *  @param UniqueKey  The object to contianing the unique key identifier
+ *  @param body  The input object from the controller
  */
-export const insertUser = async(model, UniqueKey, body) => {
+export const insertUser = async (model, UniqueKey, body) => {
     const response = await addOne(model, UniqueKey, body);
     console.info("response from service", response);
 
@@ -100,7 +93,7 @@ export const insertUser = async(model, UniqueKey, body) => {
             btn: "Verify Email",
         });
     }
-    return response
+    return response;
 };
 /**
  * This is Get all documents  handler
@@ -139,36 +132,9 @@ export const insertUser = async(model, UniqueKey, body) => {
  *  @param model  The model to perform the operation on
  *  @param result  The name to be displayed to the frontend as returned document
  */
-export const updateOne = (model, result) => {
-    return catchAsyncError(async (req, res, next) => {
-        const { id } = req.params;
-        if (result === "Blood") {
-            if (req.body.approved === "true") {
-                await userModel.findByIdAndUpdate(
-                    req.user._id,
-                    { lastDonation: Date.now() },
-                    { new: true },
-                );
-            } else if (req.body.approved === "false") {
-                sendEmail({
-                    email: req.body.email,
-                    api: "",
-                    sub: "Blood Donation Request Declined!",
-                    text: `Your donated blood virus test is positive`,
-                    title: "Blood Donation Request",
-                });
-            }
-        }
-
-        if (req.body.name) req.body.slug = slugify(req.body.name);
-        const document = await model.findByIdAndUpdate(id, req.body, {
-            new: true,
-        });
-        const response = {};
-        response[result] = document;
-        document && res.status(200).json({ message: "Success", ...response });
-        !document && next(new AppError(`Invalid ${result} Id`, 404));
-    });
+export const updateUserService = async (model, id, body) => {
+    const document = await updateOne(model, id, body);
+    return document;
 };
 /**
  * This is Get One document by id handler
@@ -178,29 +144,10 @@ export const updateOne = (model, result) => {
  *  @param model  The model to perform the operation on
  *  @param result  The name to be displayed to the frontend as returned document
  */
-export const getById = (model, result) => {
-    return catchAsyncError(async (req, res, next) => {
-        const { id } = req.params;
-        if (result === "address") {
-            const userId = req.user._id;
-            const user = await model.findById(userId);
-            const address = user.address.filter((item) => item._id === id);
-            !user && next(new AppError("Invalid user Id", 404));
-            if (address.length === 0) {
-                return next(new AppError("Invalid address Id", 404));
-            }
-            res.status(200).json({ message: "Success", address: address[0] });
-        }
-        const document = await model.findById(id);
-        if (result === "coupon") {
-            const response = {};
-            response[result] = document;
-            document &&
-                res.status(200).json({ message: "Success", ...response });
-        }
-        const response = {};
-        response[result] = document;
-        document && res.status(200).json({ message: "Success", ...response });
-        !document && next(new AppError(`Invalid ${result} Id`, 404));
-    });
+export const getUserByIdService = async (model, id) => {
+    console.log("id", id);
+    const response = await getById(model, id);
+    console.info("service", response);
+
+    return response;
 };

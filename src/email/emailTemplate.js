@@ -174,8 +174,8 @@ export function emailTemplate(api, text, title, btn) {
               <!-- end copy -->
 
               ${
-    btn
-        ? ` <tr>
+                  btn
+                      ? ` <tr>
                 <td align="left" bgcolor="#ffffff">
                   <table border="0" cellpadding="0" cellspacing="0" width="100%">
                     <tr>
@@ -192,8 +192,8 @@ export function emailTemplate(api, text, title, btn) {
                   </table>
                 </td>
               </tr>`
-        : ""
-}
+                      : ""
+              }
               <!-- start button -->
 
               <!-- end button -->

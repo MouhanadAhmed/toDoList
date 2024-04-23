@@ -49,7 +49,7 @@ UserRouter.route("/")
 UserRouter.route("/:id")
     .get(validation(getUserByIdSchema), userControllers.getUserById)
     .put(validation(updateUserSchema), userControllers.updateUser)
-    .delete(validation(deleteUserSchema), userControllers.deleteUser);
+    .delete(validation(deleteUserSchema), userControllers.removeUser);
 
 UserRouter.route("/changePassword/:id").patch(userControllers.changePassword);
 export default UserRouter;
