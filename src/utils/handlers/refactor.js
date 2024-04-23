@@ -48,34 +48,6 @@ export const getAll = async (model, UniqueKey, filters, query) => {
     };
 };
 
-export const getAllOld = (model, result) =>
-    catchAsyncError(async ({ params, query }, res) => {
-        const filters = params.chatId ? { chat: params.chatId } : {};
-
-        const totalDocuments = await model.countDocuments();
-
-        const apiFeature = new ApiFeatures(model.find(filters), query)
-            .pagination()
-            .search();
-
-        let documents = await apiFeature.mongooseQuery;
-
-        // Check if the 'order' property exists before sorting
-        if (model.schema.paths.order) {
-            documents = documents.sort("order");
-        }
-
-        const documentCount =
-            documents.length / 10 > 1 ? documents.length / 10 : 1;
-
-        res.status(200).json({
-            page: apiFeature.page,
-            pages: documentCount,
-            count: totalDocuments,
-            [result]: documents,
-        });
-    });
-
 /**
  * This is Delete One document  handler
  * ```
