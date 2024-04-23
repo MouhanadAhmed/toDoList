@@ -2,18 +2,15 @@ import bcrypt from "bcrypt";
 import slugify from "slugify";
 import { catchAsyncError } from "../../utils/middleware/catchAsyncError.js";
 import AppError from "../../utils/services/AppError.js";
-import {
     deleteOne,
-    updateOne,
-    getById,
-} from "../../utils/handlers/refactor.js";
 import { userModel } from "./user.model.js";
 import {
     insertUser,
     getAllUsers,
     deleteUser,
     getUserByIdService,
-    updateUserService, } from "./user.service.js";
+    updateUserService,
+} from "./user.service.js";
 /**
  * This is Add user Controller.
  * ```
@@ -34,19 +31,21 @@ export const addUser = catchAsyncError(async (req, res, next) => {
     let body = { ...req.body };
     body.slug = slugify(body.name);
     let UniqueKey = { email: body.email };
-    let result = await insertUser(userModel, UniqueKey, body, "User");
+    let result = await insertUser(userModel, UniqueKey, body);
     console.info("ewsult", result);
     result === "false" && next(new AppError("User alredy exists", 403));
     result !== "false" && res.status(201).json({ message: "success", result });
-})
+});
 // addOne(userModel, "User");
 /**
  * This is Get All users Controller
  */
 export const getAll = catchAsyncError(async (req, res, params) => {
     const filters = params.chatId ? { chat: req.params.chatId } : {};
-    const result = await getAllUsers(userModel, "Users", filters, req.query);
-    res.status(200).json({result});
+    const result = await getAllUsers(userModel, filters, req.query);
+    result.Users = result.documents;
+    delete result.documents;
+    res.status(200).json({ result });
 });
 /**
  * This is Update user Controller
