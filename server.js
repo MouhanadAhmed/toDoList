@@ -27,7 +27,7 @@ init(app);
 app.get("/", (req, res) => {
     res.json({
         version: "1.0.0",
-        message: "Welcome to Blood Bank API",
+        message: "Welcome to Todolist API",
         success: true,
     });
 });
