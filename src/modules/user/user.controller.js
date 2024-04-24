@@ -2,7 +2,6 @@ import bcrypt from "bcrypt";
 import slugify from "slugify";
 import { catchAsyncError } from "../../utils/middleware/catchAsyncError.js";
 import AppError from "../../utils/services/AppError.js";
-    deleteOne,
 import { userModel } from "./user.model.js";
 import {
     insertUser,

@@ -4,6 +4,9 @@ const CheckInDb = async (model, UniqueKey) => {
     const isFound = await model.findOne(UniqueKey);
     return isFound ? true : false;
 };
+export const findOne = async (model, UniqueKey) => {
+    return await model.findOne(UniqueKey);
+};
 /**
  * Get all documents handler.
  * @param {Model} model - The model to perform the operation on.
@@ -54,8 +57,8 @@ export const deleteOne = async (model, id) => {
  *  @param model  The model to perform the operation on
  *  @param result  The name to be displayed to the frontend as returned document
  */
-export const addOne = async (model, UniqueKey, body) => {
-    if (await CheckInDb(model, UniqueKey)) {
+export const addOne = async (model, body, UniqueKey) => {
+    if (UniqueKey && await CheckInDb(model, UniqueKey)) {
         return "false";
     }
     const document = new model(body);
