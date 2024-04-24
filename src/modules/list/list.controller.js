@@ -13,8 +13,6 @@ export const addList = catchAsyncError(async (req, res, next) => {
 export const getAll = catchAsyncError(async (req, res, params) => {
     const filters = params.chatId ? { chat: req.params.chatId } : {};
     const result = await getAllList(listModel, filters, req.query);
-    result.Lists = result.documents;
-    delete result.documents;
     res.status(200).json({ result });
 });
 export const updateList = catchAsyncError(async (req, res, next) => {
@@ -35,7 +33,6 @@ export const removeList = catchAsyncError(async (req, res, next) => {
 export const getListById = catchAsyncError(async (req, res, next) => {
     let { id } = req.params;
     let result = await getList(listModel, id);
-    console.info("result", result);
     result === null && next(new AppError("List not found", 404));
     result !== null &&
         res.status(200).json({ message: "success", List: result });

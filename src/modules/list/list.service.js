@@ -1,7 +1,10 @@
 import slugify from "slugify";
 import { getAll, deleteOne, addOne, updateOne, getById } from "../../utils/handlers/repository.js";
 export const getAllList = async (model, filters, query) => {
-    return await getAll(model, filters, query);
+    const result = await getAll(model, filters, query);
+    result.Lists = result.documents;
+    delete result.documents;
+    return result;
 };
 export const deleteListById = async (model, id) => {
     return await deleteOne(model, id);

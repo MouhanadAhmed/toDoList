@@ -13,8 +13,6 @@ export const addItem = catchAsyncError(async (req, res, next) => {
 export const getAll = catchAsyncError(async (req, res, params) => {
     const filters = params.chatId ? { chat: req.params.chatId } : {};
     const result = await getAllItems(itemModel, filters, req.query);
-    result.Items = result.documents;
-    delete result.documents;
     res.status(200).json({ result });
 });
 export const updateItem = catchAsyncError(async (req, res, next) => {

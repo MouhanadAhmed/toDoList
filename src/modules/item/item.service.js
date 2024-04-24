@@ -1,7 +1,10 @@
 import { getAll, deleteOne, addOne, updateOne, getById, findOne } from "../../utils/handlers/repository.js";
 
 export const getAllItems = async (model, filters, query) => {
-    return await getAll(model, filters, query);
+    const result = await getAll(model, filters, query);
+    result.Items = result.documents;
+    delete result.documents;
+    return result;
 };
 export const deleteItemById = async (model, id) => {
     return await deleteOne(model, id);
@@ -17,6 +20,6 @@ export const insertItem = async (model, body) => {
 export const updateItemById = async (model, id, body) => {
     return await updateOne(model, id, body);
 };
-export const getItem= async (model, id) => {
+export const getItem = async (model, id) => {
     return await getById(model, id);
 };
