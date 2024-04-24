@@ -7,8 +7,8 @@ import { insertItem, getAllItems, deleteItemById, getItem, updateItemById } from
 export const addItem = catchAsyncError(async (req, res, next) => {
     let body = { ...req.body };
     let result = await insertItem(itemModel, body);
-    result === "false" && next(new AppError("Item alredy exists", 403));
-    result !== "false" && res.status(201).json({ message: "success", result });
+    result.error && next(new AppError(result.error, 403));
+    !result.error && res.status(201).json({ message: "success", result });
 });
 export const getAll = catchAsyncError(async (req, res, params) => {
     const filters = params.chatId ? { chat: req.params.chatId } : {};

@@ -40,7 +40,7 @@ export const deleteUser = async (model, id) => {
  *  @param body  The input object from the controller
  */
 export const insertUser = async (model, UniqueKey, body) => {
-    const response = await addOne(model, UniqueKey, body);
+    const response = await addOne(model, body, UniqueKey);
     console.info("response from service", response);
 
     if (response !== "false") {

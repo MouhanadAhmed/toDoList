@@ -9,7 +9,7 @@ export const deleteListById = async (model, id) => {
 export const insertList = async (model, body) => {
     model.slug = slugify(model.name);
     let UniqueKey = { name: body.name };
-    const response = await addOne(model, UniqueKey, body);
+    const response = await addOne(model, body, UniqueKey);
     return response;
 };
 export const updateListById = async (model, id, body) => {
