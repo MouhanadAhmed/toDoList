@@ -12,8 +12,10 @@ UserRouter.route("/")
     .post(validation(createItemSchema), itemControllers.addItem)
     .get(itemControllers.getAll);
 
-UserRouter.route("/:id")
+UserRouter.route("/:id/list")
     .get(validation(getItemByIdSchema), itemControllers.getAll)
+
+UserRouter.route("/:id")
     .get(validation(getItemByIdSchema), itemControllers.getItemById)
     .get(validation(getItemByIdSchema), itemControllers.getItemById)
     .put(validation(updateItemchema), itemControllers.updateItem)
