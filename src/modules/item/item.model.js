@@ -7,6 +7,7 @@ const itemSchema = new Schema(
             type: Types.ObjectId,
             ref: "List",
         },
+        archived: { type: "Bool" },
     },
     { timestamps: true },
 );
