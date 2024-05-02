@@ -10,8 +10,8 @@ export const addItem = catchAsyncError(async (req, res, next) => {
     result.error && next(new AppError(result.error, 403));
     !result.error && res.status(201).json({ message: "success", result });
 });
-export const getAll = catchAsyncError(async (req, res, params) => {
-    const filters = params.chatId ? { chat: req.params.chatId } : {};
+export const getAll = catchAsyncError(async (req, res) => {
+    const filters = req.params ? { list: req.params.id } : {};
     const result = await getAllItems(itemModel, filters, req.query);
     res.status(200).json({ result });
 });
@@ -32,7 +32,7 @@ export const removeItem = catchAsyncError(async (req, res, next) => {
 });
 export const getItemById = catchAsyncError(async (req, res, next) => {
     let { id } = req.params;
-    let result = await  getItem(itemModel, id);
+    let result = await getItem(itemModel, id);
     console.info("result", result);
     result === null && next(new AppError("Item not found", 404));
     result !== null &&

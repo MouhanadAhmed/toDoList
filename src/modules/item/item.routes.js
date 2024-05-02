@@ -13,6 +13,8 @@ UserRouter.route("/")
     .get(itemControllers.getAll);
 
 UserRouter.route("/:id")
+    .get(validation(getItemByIdSchema), itemControllers.getAll)
+    .get(validation(getItemByIdSchema), itemControllers.getItemById)
     .get(validation(getItemByIdSchema), itemControllers.getItemById)
     .put(validation(updateItemchema), itemControllers.updateItem)
     .delete(validation(deleteItemSchema), itemControllers.removeItem);
