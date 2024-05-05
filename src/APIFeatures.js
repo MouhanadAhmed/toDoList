@@ -25,10 +25,10 @@ export default class ApiFeatures {
      * ```
      */
     pagination() {
-        const defaultLimit = 10;
+        const defaultLimit = 100;
 
         // Extract and validate the page number from the query string
-        let page = parseInt(this.queryString.page, 10) || 1;
+        let page = parseInt(this.queryString.page, 100) || 1;
         page = page > 0 ? page : 1;
 
         // Calculate the skip value
