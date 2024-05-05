@@ -7,17 +7,15 @@ import {
     getItemByIdSchema,
     updateItemchema,
 } from "./item.validator.js";
-const UserRouter = express.Router();
-UserRouter.route("/")
+const ItemRouter = express.Router();
+ItemRouter.route("/")
     .post(validation(createItemSchema), itemControllers.addItem)
     .get(itemControllers.getAll);
 
-UserRouter.route("/:id/list")
+ItemRouter.route("/:id/list")
     .get(validation(getItemByIdSchema), itemControllers.getAll)
 
-UserRouter.route("/:id")
-    .get(validation(getItemByIdSchema), itemControllers.getItemById)
-    .get(validation(getItemByIdSchema), itemControllers.getItemById)
+ItemRouter.route("/:id")
     .put(validation(updateItemchema), itemControllers.updateItem)
     .delete(validation(deleteItemSchema), itemControllers.removeItem);
-export default UserRouter;
+export default ItemRouter;

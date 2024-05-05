@@ -7,13 +7,13 @@ import {
     getListByIdSchema,
     updateListchema,
 } from "./list.validator.js";
-const UserRouter = express.Router();
-UserRouter.route("/")
+const ListRouter = express.Router();
+ListRouter.route("/")
     .post(validation(createListSchema), listControllers.addList)
     .get(listControllers.getAll);
 
-UserRouter.route("/:id")
+ListRouter.route("/:id")
     .get(validation(getListByIdSchema), listControllers.getListById)
     .put(validation(updateListchema), listControllers.updateList)
     .delete(validation(deleteListSchema), listControllers.removeList);
-export default UserRouter;
+export default ListRouter;
