@@ -11,7 +11,7 @@ export const addList = catchAsyncError(async (req, res, next) => {
     result !== "false" && res.status(201).json({ message: "success", result });
 });
 export const getAll = catchAsyncError(async (req, res, params) => {
-    const filters = params.chatId ? { chat: req.params.chatId } : {};
+    const filters = {};
     const result = await getAllList(listModel, filters, req.query);
     res.status(200).json({ result });
 });

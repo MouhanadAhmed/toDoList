@@ -17,8 +17,7 @@ export const getAll = async (model, filters, query) => {
 
     const apiFeature = new ApiFeatures(model.find(filters), query)
         .pagination()
-        .search();
-
+        .search() ;
     let documents = await apiFeature.mongooseQuery;
 
     // Check if the 'order' property exists before sorting
@@ -26,7 +25,7 @@ export const getAll = async (model, filters, query) => {
         documents = documents.sort("order");
     }
 
-    const documentCount = documents.length / 10 > 1 ? documents.length / 10 : 1;
+    const documentCount = documents.length / 100 > 1 ? documents.length / 100 : 1;
 
     return {
         page: apiFeature.page,
