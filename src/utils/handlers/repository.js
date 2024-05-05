@@ -46,6 +46,10 @@ export const deleteOne = async (model, id) => {
     const document = await model.findByIdAndDelete(id);
     return document;
 };
+export const deleteAll = async (model, filter) => {
+    const document = await model.deleteMany(filter);
+    return document;
+};
 /**
  * This is Add One document  handler
  * ```
