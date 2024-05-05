@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import AppError from "../services/AppError.js";
 import { userModel } from "../../modules/user/user.model.js";
 import { catchAsyncError } from "./catchAsyncError.js";
+import { findOne } from "../handlers/repository.js";
 /**
  * This is Protected Routes  Controller
  * Verifies user token for the following criteria :
@@ -45,9 +46,8 @@ export const protectedRoutes = catchAsyncError(async (req, res, next) => {
         },
     );
 
-    const user = await userModel.findOne({
+    const user = await findOne(userModel,{
         email: decoded.email,
-        nationalId: decoded.organizationId,
     });
 
     if (!user) return next(new AppError("Invalid userId", 404));

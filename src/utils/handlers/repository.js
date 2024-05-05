@@ -76,8 +76,6 @@ export const updateOne = async (model, id, body) => {
     const document = await model.findByIdAndUpdate(id, body, {
         new: true,
     });
-    console.info("document from repo", document);
-
     return document;
 };
 /**
